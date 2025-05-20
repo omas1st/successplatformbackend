@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
     await sendMail(
-      "New User Registered",
+      "Success winning platform",
       `A new user has registered:\n\nUsername: ${user.username}\nEmail: ${user.email}\nWhatsApp: ${user.whatsapp}\nTime: ${new Date().toUTCString()}`
     );
 
@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
     }
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
     await sendMail(
-      "User Logged In",
+      "Success winning platform",
       `A user has logged in:\n\nUsername: ${user.username}\nEmail: ${user.email}\nWhatsApp: ${user.whatsapp}\nTime: ${new Date().toUTCString()}`
     );
 
