@@ -1,24 +1,28 @@
-// backend/server.js
-
-require("dotenv").config();         // load .env before anything
-const express   = require("express");
-const cors      = require("cors");
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 const connectDB = require("./config/db");
 
 connectDB();
 const app = express();
 
-app.use(cors());
+// Configure CORS for production
+app.use(cors({
+  origin: [
+    "https://uk49success.vercel.app", // Your frontend URL
+    "http://localhost:3000" // Local development
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
+
 app.use(express.json());
 
-// health check
 app.get("/", (req, res) => res.send("API is running"));
 
-// public routes
+// Existing route setup
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/lotto", require("./routes/lottoRoutes"));
-
-// admin routes
 app.use("/api/admin", require("./routes/adminRoutes"));
 
 const PORT = process.env.PORT || 5000;
