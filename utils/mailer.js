@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = async (subject, text) => {
   await transporter.sendMail({
-    from: `"UK49s Platform" <${process.env.ADMIN_EMAIL}>`,
+    from: `"Success UK49s Platform" <${process.env.ADMIN_EMAIL}>`,
     to: process.env.ADMIN_EMAIL,
     subject,
     text,
