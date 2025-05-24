@@ -67,6 +67,6 @@ exports.sendMessage = async (req, res) => {
     from: req.user._id,
     body: message
   });
-  await sendMail("User Message", message);
+  await sendMail("Success Uk49s User Message", message);
   res.json({ message: "Sent" });
 };
