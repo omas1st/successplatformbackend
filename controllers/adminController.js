@@ -38,7 +38,6 @@ exports.getBalls = async (_, res) => {
   });
 };
 
-
 // Update homepage balls (admin panel)
 exports.updateBalls = async (req, res) => {
   const { free, premium } = req.body;
@@ -66,7 +65,7 @@ exports.updatePastWinning = async (req, res) => {
   try {
     await Promise.all(req.body.records.map(r =>
       PastWinning.create({ type: r.type, balls: r.balls, date: new Date() })
-    ));
+    );
     res.json({ message: "Past-winning updated" });
   } catch (err) {
     console.error(err);
@@ -83,7 +82,7 @@ exports.updatePastResults = async (req, res) => {
   try {
     await Promise.all(req.body.records.map(r =>
       Result.create({ type: r.type, balls: r.balls, date: new Date() })
-    ));
+    );
     res.json({ message: "Past-results updated" });
   } catch (err) {
     console.error(err);
@@ -114,6 +113,6 @@ exports.updateRedirects = (req, res) =>
 // Utility
 function startOfToday() {
   const d = new Date();
-  d.setUTCHours(0, 1, 0, 0);
+  d.setUTCHours(0, 0, 0, 0); // Changed to midnight UTC
   return d;
 }
