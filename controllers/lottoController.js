@@ -9,6 +9,7 @@ exports.getFree = async (req, res) => {
     if (!doc) {
       doc = await LottoBall.create({
         type: "free",
+        date: startOfToday(), // Explicitly set date
         balls: Array(14).fill({ value: "00", isWon: false })
       });
     }
@@ -65,12 +66,12 @@ exports.getPastResults = async (req, res) => {
 };
 
 // Helpers
-
 async function upsert(type, count) {
   let doc = await LottoBall.findOne({ type, date: { $gte: startOfToday() } });
   if (!doc) {
     doc = await LottoBall.create({
       type,
+      date: startOfToday(), // Explicitly set date
       balls: Array(count).fill({ value: "00", isWon: false })
     });
   }
@@ -79,6 +80,6 @@ async function upsert(type, count) {
 
 function startOfToday() {
   const d = new Date();
-  d.setUTCHours(0,1,0,0);
+  d.setUTCHours(0, 0, 0, 0); // Changed to midnight UTC
   return d;
 }
