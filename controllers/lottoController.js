@@ -79,6 +79,6 @@ async function upsert(type, count) {
 
 function startOfToday() {
   const d = new Date();
-  d.setUTCHours(0,0,2,0);
+  d.setUTCHours(0,0,0,0);
   return d;
 }
