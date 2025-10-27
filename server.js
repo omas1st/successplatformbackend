@@ -9,7 +9,7 @@ const app = express();
 // Configure CORS for production
 app.use(cors({
   origin: [
-    "https://successuk49.vercel.app", // Your frontend URL
+    "https://successplatformbackend-eta.vercel.app/", // Your frontend URL
     "http://localhost:3000" // Local development
   ],
   credentials: true,
