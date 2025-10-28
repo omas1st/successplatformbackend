@@ -23,19 +23,16 @@ exports.deleteUser = (req, res) =>
 
 // Get editable balls for home page
 exports.getBalls = async (_, res) => {
-  const free = await LottoBall.findOne({ type: "free", date: { $gte: startOfToday() } });
   const lunchtime = await LottoBall.findOne({ type: "lunchtime", date: { $gte: startOfToday() } });
   const teatime = await LottoBall.findOne({ type: "teatime", date: { $gte: startOfToday() } });
   res.json({
-    free: free.balls,
     premium: { lunchtime: lunchtime.balls, teatime: teatime.balls }
   });
 };
 
 // Update homepage balls (admin panel)
 exports.updateBalls = async (req, res) => {
-  const { free, premium } = req.body;
-  await LottoBall.updateOne({ type: "free", date: { $gte: startOfToday() } }, { balls: free });
+  const { premium } = req.body;
   await LottoBall.updateOne({ type: "lunchtime", date: { $gte: startOfToday() } }, { balls: premium.lunchtime });
   await LottoBall.updateOne({ type: "teatime", date: { $gte: startOfToday() } }, { balls: premium.teatime });
   res.json({ message: "Balls updated" });
