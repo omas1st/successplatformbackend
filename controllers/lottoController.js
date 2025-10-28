@@ -2,23 +2,6 @@ const LottoBall   = require("../models/LottoBall");
 const PastWinning = require("../models/PastWinning");
 const Result      = require("../models/Result");
 
-// GET free balls for today
-exports.getFree = async (req, res) => {
-  try {
-    let doc = await LottoBall.findOne({ type: "free", date: { $gte: startOfToday() } });
-    if (!doc) {
-      doc = await LottoBall.create({
-        type: "free",
-        balls: Array(14).fill({ value: "00", isWon: false })
-      });
-    }
-    res.json({ balls: doc.balls.map(b => b.value) });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
 // GET premium predictions for today
 exports.getPremium = async (req, res) => {
   try {
