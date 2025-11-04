@@ -11,6 +11,9 @@ const userSchema = new mongoose.Schema({
   username:      { type: String, required: true, unique: true, lowercase: true },
   password:      { type: String, required: true },
 
+  // Admin flag
+  isAdmin:       { type: Boolean, default: false },
+
   // per-user premium predictions
   premium: {
     lunchtime: { type: [String], default: ["00","00","00","00"] },
