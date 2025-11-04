@@ -15,13 +15,24 @@ const protect = async (req, res, next) => {
   }
 };
 
-const adminProtect = (req, res, next) => {
-  const { username, password } = req.body.admin || {};
-  if (username?.toLowerCase() === process.env.ADMIN_USERNAME &&
-      password === process.env.ADMIN_PASSWORD) {
-    return next();
+const adminProtect = async (req, res, next) => {
+  const header = req.headers.authorization;
+  if (!header) return res.status(401).json({ message: "Not authorized" });
+
+  const token = header.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id);
+    
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    req.user = user;
+    next();
+  } catch (err) {
+    res.status(401).json({ message: "Invalid token" });
   }
-  res.status(403).json({ message: "Admin credentials required" });
 };
 
 module.exports = { protect, adminProtect };
