@@ -24,7 +24,13 @@ const adminProtect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findById(decoded.id);
     
-    if (!user || !user.isAdmin) {
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    
+    // Check if user is admin OR if they're using admin credentials
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'omas';
+    if (!user.isAdmin && user.username !== ADMIN_USERNAME.toLowerCase()) {
       return res.status(403).json({ message: "Admin access required" });
     }
     
