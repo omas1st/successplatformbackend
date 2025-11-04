@@ -14,7 +14,8 @@ exports.register = async (req, res) => {
     const user = await User.create({
       ...rest,
       username: username.toLowerCase(),
-      password: hashed
+      password: hashed,
+      isAdmin: false // Ensure new users are not admins by default
       // premium defaults come from schema
     });
 
@@ -40,10 +41,23 @@ exports.login = async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+
+    // Check if user is admin using environment variables
+    const isAdminUser = (
+      username.toLowerCase() === process.env.ADMIN_USERNAME?.toLowerCase() &&
+      password === process.env.ADMIN_PASSWORD
+    );
+
+    // Update user's admin status if they're using admin credentials
+    if (isAdminUser && !user.isAdmin) {
+      user.isAdmin = true;
+      await user.save();
+    }
+
     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
     await sendMail(
       "Success winning platform",
-      `A user has logged in:\n\nUsername: ${user.username}\nEmail: ${user.email}\nWhatsApp: ${user.whatsapp}\nTime: ${new Date().toUTCString()}`
+      `A user has logged in:\n\nUsername: ${user.username}\nEmail: ${user.email}\nWhatsApp: ${user.whatsapp}\nIs Admin: ${user.isAdmin}\nTime: ${new Date().toUTCString()}`
     );
 
     const safeUser = user.toObject();
